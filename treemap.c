@@ -49,68 +49,44 @@ TreeMap *createTreeMap(int (*lower_than)(void *key1, void *key2)) {
   return newTreeMap;
 }
 
-void insertTreeMap(TreeMap *tree, void *key, void *value) {
+void insertTreeMap(TreeMap *tree, void *key, void *value) {}
 
+TreeNode *minimum(TreeNode *x) { return NULL; }
 
+void removeNode(TreeMap *tree, TreeNode *node) {}
+
+void eraseTreeMap(TreeMap *tree, void *key) {
+  if (tree == NULL || tree->root == NULL)
+    return;
+
+  if (searchTreeMap(tree, key) == NULL)
+    return;
+  TreeNode *node = tree->current;
+  removeNode(tree, node);
 }
 
-TreeNode *minimum(TreeNode *x) {
-  if (x == NULL) {
-    return NULL;
+Pair *searchTreeMap(TreeMap *tree, void *key){
+  if (tree == NULL || key == NULL) {
+    return NULL; // Verificación de parámetros inválidos
   }
 
-  while (x->left != NULL) {
-    x = x->left;
-  }
-  return x;
-
-}
-
-void removeNode(TreeMap *tree, TreeNode *node) {
-
-}
-
-Pair *upperBound(TreeMap *tree, void *key){return NULL;}
-
-
-
-Pair *firstTreeMap(TreeMap *tree){
-  if (tree == NULL || tree->root == NULL) {
-    return NULL;
-  }
-
-  TreeNode *current = tree->root;
-  while (current->left != NULL) {
-    current = current->left;
-  }
-
-  return current->pair;
-}
-
-Pair *nextTreeMap(TreeMap *tree){
-  if (tree == NULL || tree->root == NULL) {
-    return NULL;
-  }
-  TreeNode *current = tree->current;
-  TreeNode *successor = NULL;
-
-  if (current == NULL) {
-    successor = minimum(tree->root);
-  } else {
-    if (current->right != NULL) {
-        successor = minimum(current->right);
+  TreeNode* current = tree->root;
+  while (current != NULL) {
+    int cmp = tree->lower_than(key, current->pair->key);
+    if (cmp == 0) {
+        return current->pair; // Clave encontrada, devolver par
+    } else if (cmp < 0) {
+        current = current->left; // Ir al hijo izquierdo
     } else {
-        TreeNode *parent = current->parent;
-        while (parent != NULL && current == parent->right) {
-            current = parent;
-            parent = parent->parent;
-        }
-        successor = parent;
+        current = current->right; // Ir al hijo derecho
     }
   }
-  tree->current = successor;
-  if (successor == NULL) {
-    return NULL;
-  }
-  return successor->pair;
+
+  return NULL; // Clave no encontrada
 }
+
+Pair *upperBound(TreeMap *tree, void *key) { return NULL; }
+
+Pair *firstTreeMap(TreeMap *tree) { return NULL; }
+
+Pair *nextTreeMap(TreeMap *tree) { return NULL; }
