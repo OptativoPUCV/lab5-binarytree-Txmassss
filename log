@@ -14,3 +14,12 @@ Wed 08 May 2024 07:42:15 PM UTC:
  tests:  4|7
 total_score: 5/70
 12a2f7b
+Wed 08 May 2024 07:43:32 PM UTC: 
+ treemap.c | 67 +++++++++++++++++++++++++++++++--------------------------------
+ 1 file changed, 33 insertions(+), 34 deletions(-)
+In file included from test.c:4:
+treemap.c:68:45: error: expected ‘;’, ‘,’ or ‘)’ before ‘{’ token
+   68 | Pair *searchTreeMap(TreeMap *tree, void *key{
+      |                                             ^
+Compilation failed
+4439f78
