@@ -50,39 +50,45 @@ TreeMap *createTreeMap(int (*lower_than)(void *key1, void *key2)) {
 }
 
 void insertTreeMap(TreeMap *tree, void *key, void *value) {
-  TreeNode *newNode = createTreeNode(key, value);
-  if (newNode == NULL) {
+  if (tree == NULL || key == NULL || value == NULL) {
+      return;
+  }
+
+  TreeNode *new_node = createTreeNode(key, value);
+  if (new_node == NULL) {
       fprintf(stderr, "Memory allocation failed\n");
+      return;
+  }
+
+  if (tree->root == NULL) {
+      tree->root = new_node;
       return;
   }
 
   TreeNode *current = tree->root;
   TreeNode *parent = NULL;
 
-  // Find the parent node to attach the new node
   while (current != NULL) {
       parent = current;
-      if (tree->lower_than(key, current->pair->key) < 0) {
+      int cmp = tree->lower_than(key, current->pair->key);
+      if (cmp < 0) {
           current = current->left;
-      } else if (tree->lower_than(key, current->pair->key) > 0) {
+      } else if (cmp > 0) {
           current = current->right;
       } else {
           // Key already exists, update the value and return
           current->pair->value = value;
-          free(newNode->pair);
-          free(newNode);
+          free(new_node->pair);
+          free(new_node);
           return;
       }
   }
 
-  // Attach the new node to the correct side of the parent
-  newNode->parent = parent;
-  if (parent == NULL) {
-      tree->root = newNode;
-  } else if (tree->lower_than(key, parent->pair->key) < 0) {
-      parent->left = newNode;
+  new_node->parent = parent;
+  if (tree->lower_than(key, parent->pair->key) < 0) {
+      parent->left = new_node;
   } else {
-      parent->right = newNode;
+      parent->right = new_node;
   }
 }
 
