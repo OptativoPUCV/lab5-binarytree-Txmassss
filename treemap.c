@@ -50,46 +50,7 @@ TreeMap *createTreeMap(int (*lower_than)(void *key1, void *key2)) {
 }
 
 void insertTreeMap(TreeMap *tree, void *key, void *value) {
-  if (tree == NULL || key == NULL || value == NULL) {
-      return;
-  }
-
-  TreeNode *new_node = createTreeNode(key, value);
-  if (new_node == NULL) {
-      fprintf(stderr, "Memory allocation failed\n");
-      return;
-  }
-
-  if (tree->root == NULL) {
-      tree->root = new_node;
-      return;
-  }
-
-  TreeNode *current = tree->root;
-  TreeNode *parent = NULL;
-
-  while (current != NULL) {
-      parent = current;
-      int cmp = tree->lower_than(key, current->pair->key);
-      if (cmp < 0) {
-          current = current->left;
-      } else if (cmp > 0) {
-          current = current->right;
-      } else {
-          // Key already exists, update the value and return
-          current->pair->value = value;
-          free(new_node->pair);
-          free(new_node);
-          return;
-      }
-  }
-
-  new_node->parent = parent;
-  if (tree->lower_than(key, parent->pair->key) < 0) {
-      parent->left = new_node;
-  } else {
-      parent->right = new_node;
-  }
+  
 }
 
 TreeNode *minimum(TreeNode *x) { return NULL; }
@@ -126,7 +87,29 @@ Pair *searchTreeMap(TreeMap *tree, void *key){
   return NULL; // Clave no encontrada
 }
 
-Pair *upperBound(TreeMap *tree, void *key) { return NULL; }
+Pair *upperBound(TreeMap *tree, void *key) {
+  if (tree == NULL || key == NULL || tree->root == NULL) {
+    return NULL;
+  }
+
+  TreeNode *current = tree->root;
+  TreeNode *upperBoundNode = NULL;
+
+  while (current != NULL) {
+    if (tree->lower_than(key, current->pair->key) < 0) {
+        upperBoundNode = current;
+        current = current->left;
+    } else {
+        current = current->right;
+    }
+  }
+
+  if (upperBoundNode == NULL) {
+    return NULL;
+  }
+
+  return upperBoundNode->pair;
+}
 
 Pair *firstTreeMap(TreeMap *tree) { return NULL; }
 
