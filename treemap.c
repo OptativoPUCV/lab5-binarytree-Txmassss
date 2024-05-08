@@ -53,7 +53,17 @@ void insertTreeMap(TreeMap *tree, void *key, void *value) {
   
 }
 
-TreeNode *minimum(TreeNode *x) { return NULL; }
+TreeNode *minimum(TreeNode *x){
+  if (x == NULL) {
+    return NULL;
+  }
+
+  while (x->left != NULL) {
+    x = x->left;
+  }
+
+  return x;
+}
 
 void removeNode(TreeMap *tree, TreeNode *node) {}
 
@@ -88,27 +98,7 @@ Pair *searchTreeMap(TreeMap *tree, void *key){
 }
 
 Pair *upperBound(TreeMap *tree, void *key) {
-  if (tree == NULL || key == NULL || tree->root == NULL) {
-    return NULL;
-  }
-
-  TreeNode *current = tree->root;
-  TreeNode *upperBoundNode = NULL;
-
-  while (current != NULL) {
-    if (tree->lower_than(key, current->pair->key) < 0) {
-        upperBoundNode = current;
-        current = current->left;
-    } else {
-        current = current->right;
-    }
-  }
-
-  if (upperBoundNode == NULL) {
-    return NULL;
-  }
-
-  return upperBoundNode->pair;
+  
 }
 
 Pair *firstTreeMap(TreeMap *tree) { return NULL; }
