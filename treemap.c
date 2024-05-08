@@ -49,7 +49,36 @@ TreeMap *createTreeMap(int (*lower_than)(void *key1, void *key2)) {
   return newTreeMap;
 }
 
-void insertTreeMap(TreeMap *tree, void *key, void *value) {}
+void insertTreeMap(TreeMap *tree, void *key, void *value) {
+  TreeNode *newNode = createTreeNode(key, value);
+  if (newNode == NULL) {
+      fprintf(stderr, "Memory allocation failed\n");
+      return;
+  }
+
+  if (tree->root == NULL) {
+      tree->root = newNode;
+      return;
+  }
+
+  TreeNode *current = tree->root;
+  TreeNode *parent = NULL;
+  while (current != NULL) {
+      parent = current;
+      if (tree->lower_than(key, current->pair->key) < 0) {
+          current = current->left;
+      } else {
+          current = current->right;
+      }
+  }
+
+  newNode->parent = parent;
+  if (tree->lower_than(key, parent->pair->key) < 0) {
+      parent->left = newNode;
+  } else {
+      parent->right = newNode;
+  }
+}
 
 TreeNode *minimum(TreeNode *x) { return NULL; }
 
@@ -90,29 +119,5 @@ Pair *upperBound(TreeMap *tree, void *key) { return NULL; }
 Pair *firstTreeMap(TreeMap *tree) { return NULL; }
 
 Pair *nextTreeMap(TreeMap *tree){
-  if (tree == NULL || tree->root == NULL) {
-    return NULL;
-  }
-  TreeNode *current = tree->current;
-  TreeNode *successor = NULL;
-
-  if (current == NULL) {
-    successor = minimum(tree->root);
-  } else {
-    if (current->right != NULL) {
-        successor = minimum(current->right);
-    } else {
-        TreeNode *parent = current->parent;
-        while (parent != NULL && current == parent->right) {
-            current = parent;
-            parent = parent->parent;
-        }
-        successor = parent;
-    }
-  }
-  tree->current = successor;
-  if (successor == NULL) {
-    return NULL;
-  }
-  return successor->pair;
+  
 }
