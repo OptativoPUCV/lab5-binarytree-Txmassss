@@ -65,7 +65,7 @@ void eraseTreeMap(TreeMap *tree, void *key) {
   removeNode(tree, node);
 }
 
-Pair *searchTreeMap(TreeMap *tree, void *key{
+Pair *searchTreeMap(TreeMap *tree, void *key){
   if (tree == NULL || key == NULL) {
     return NULL; // Verificación de parámetros inválidos
   }
