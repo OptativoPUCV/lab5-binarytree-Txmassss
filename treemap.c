@@ -56,24 +56,30 @@ void insertTreeMap(TreeMap *tree, void *key, void *value) {
       return;
   }
 
-  if (tree->root == NULL) {
-      tree->root = newNode;
-      return;
-  }
-
   TreeNode *current = tree->root;
   TreeNode *parent = NULL;
+
+  // Find the parent node to attach the new node
   while (current != NULL) {
       parent = current;
       if (tree->lower_than(key, current->pair->key) < 0) {
           current = current->left;
-      } else {
+      } else if (tree->lower_than(key, current->pair->key) > 0) {
           current = current->right;
+      } else {
+          // Key already exists, update the value and return
+          current->pair->value = value;
+          free(newNode->pair);
+          free(newNode);
+          return;
       }
   }
 
+  // Attach the new node to the correct side of the parent
   newNode->parent = parent;
-  if (tree->lower_than(key, parent->pair->key) < 0) {
+  if (parent == NULL) {
+      tree->root = newNode;
+  } else if (tree->lower_than(key, parent->pair->key) < 0) {
       parent->left = newNode;
   } else {
       parent->right = newNode;
