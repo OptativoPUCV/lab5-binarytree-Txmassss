@@ -89,4 +89,30 @@ Pair *upperBound(TreeMap *tree, void *key) { return NULL; }
 
 Pair *firstTreeMap(TreeMap *tree) { return NULL; }
 
-Pair *nextTreeMap(TreeMap *tree) { return NULL; }
+Pair *nextTreeMap(TreeMap *tree){
+  if (tree == NULL || tree->root == NULL) {
+    return NULL;
+  }
+  TreeNode *current = tree->current;
+  TreeNode *successor = NULL;
+
+  if (current == NULL) {
+    successor = minimum(tree->root);
+  } else {
+    if (current->right != NULL) {
+        successor = minimum(current->right);
+    } else {
+        TreeNode *parent = current->parent;
+        while (parent != NULL && current == parent->right) {
+            current = parent;
+            parent = parent->parent;
+        }
+        successor = parent;
+    }
+  }
+  tree->current = successor;
+  if (successor == NULL) {
+    return NULL;
+  }
+  return successor->pair;
+}
